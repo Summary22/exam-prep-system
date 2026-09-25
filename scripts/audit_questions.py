@@ -16,7 +16,15 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DATA = ROOT / "src" / "data"
-SUBJECT_FILES = ["osQuestions", "networkQuestions", "programmingQuestions", "introQuestions"]
+SUBJECT_FILES = [
+    # 最初的 AI Studio 版题库
+    "osQuestions", "networkQuestions", "programmingQuestions", "introQuestions",
+    # 按自考课程代码整理的分科题库
+    "networkprincipleQuestions", "sysprincipleQuestions", "hardwareQuestions",
+    "sysintegrationQuestions", "datastructureQuestions", "discretemathQuestions",
+    "mathQuestions", "englishQuestions", "gangyaoQuestions", "marxismQuestions",
+    "xigaiQuestions",
+]
 
 # Heuristics for "this is not a real question, it is a slice of a code listing".
 FRAGMENT_STARTS = (
@@ -107,7 +115,7 @@ def main() -> int:
         return 0
 
     print("=" * 68)
-    print(f"题库审计 · 四科共 {total} 题")
+    print(f"题库审计 · {len({r['subject'] for r in rows})} 科共 {total} 题")
     print("=" * 68)
 
     print(f"\n有答案            {with_answer:>5}  ({with_answer / total * 100:.1f}%)")

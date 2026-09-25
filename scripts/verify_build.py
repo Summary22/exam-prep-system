@@ -1,7 +1,7 @@
 """End-to-end verification of the built site.
 
 Serves dist/ over HTTP and drives it in headless Chrome (a throwaway profile, so the
-user's own browser is untouched). Checks that the app actually renders, that all 1054
+user's own browser is untouched). Checks that the app actually renders, that all 4044
 questions survive the build, that the optional-AI path degrades correctly with no key,
 and that the PWA assets are wired up.
 """
@@ -30,10 +30,10 @@ REMOTE = _argv[_argv.index("--url") + 1].rstrip("/") + "/" if "--url" in _argv e
 BASE = REMOTE or f"http://127.0.0.1:{PORT}/"
 
 # Expected values, measured from the source data rather than assumed.
-EXPECTED_QUESTIONS = 1055
-# 1054 from the four subject data files (of which 803 carry a non-empty explanation)
+EXPECTED_QUESTIONS = 4045
+# 4044 from the fifteen subject data files (of which 3784 carry a non-empty explanation)
 # plus one hardcoded sample question in mockData.ts that does have an explanation.
-EXPECTED_WITH_EXPLANATION = 804
+EXPECTED_WITH_EXPLANATION = 3785
 failures: list[str] = []
 notes: list[str] = []
 
@@ -142,6 +142,23 @@ def main() -> int:
                     break
             check("可点选答案选项", clicked or True, "（选项文案因科目而异，未强匹配）" if not clicked else "")
             page.wait_for_timeout(600)
+
+            print("\n═══ 3b. 公式图片渲染（新增科目）═══")
+            # 离散数学 stores its formulas as images referenced as qimg/<hash>.gif, rendered
+            # by RichText. Verify they appear AND actually decode, so a broken path or a
+            # missing file in public/qimg/ cannot pass silently.
+            page.click("text=离散数学")
+            page.wait_for_timeout(2500)
+            imgs = page.evaluate("""() => {
+                const list = [...document.querySelectorAll('img[src^="qimg/"]')];
+                return {
+                    total: list.length,
+                    loaded: list.filter(i => i.complete && i.naturalWidth > 0).length,
+                    sample: list.length ? list[0].getAttribute('src') : null,
+                };
+            }""")
+            check("公式图片出现在题面", imgs["total"] > 0, f"{imgs['total']} 张，示例 {imgs['sample']}")
+            check("公式图片真实解码成功", imgs["loaded"] > 0, f"{imgs['loaded']}/{imgs['total']} 已加载")
 
             print("\n═══ 4. 无 Key 时 AI 解析的降级提示 ═══")
             for b in page.query_selector_all("button"):

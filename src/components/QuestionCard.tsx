@@ -6,6 +6,7 @@ import { Star, AlertCircle, CheckCircle2, Eye, Code, Sparkles, Loader2 } from 'l
 import { Question, subjects } from '@/src/data/mockData';
 import { cn } from '@/lib/utils';
 import { explanationPrompt, getClient, getModel, hasApiKey } from '@/src/lib/gemini';
+import { RichText } from './RichText';
 
 interface QuestionCardProps {
   question: Question;
@@ -102,7 +103,7 @@ export function QuestionCard({ question, onUpdate, showSubjectBadge }: QuestionC
           </div>
         </div>
         <CardTitle className="text-lg font-medium text-slate-800 mt-4 leading-relaxed">
-          {question.text}
+          <RichText text={question.text} />
         </CardTitle>
       </CardHeader>
       
@@ -179,7 +180,7 @@ export function QuestionCard({ question, onUpdate, showSubjectBadge }: QuestionC
                   )}>
                     {String.fromCharCode(65 + idx)}
                   </div>
-                  <span className="flex-1">{option}</span>
+                  <span className="flex-1"><RichText text={option} /></span>
                   {showResult && isCorrectOption && <CheckCircle2 className="w-5 h-5 text-green-500" />}
                 </div>
               );
@@ -259,14 +260,16 @@ export function QuestionCard({ question, onUpdate, showSubjectBadge }: QuestionC
                   </pre>
                 ) : (
                   <span className="text-green-600 font-medium ml-2">
-                    {Array.isArray(question.answer) ? question.answer.join(', ') : question.answer}
+                    <RichText
+                      text={Array.isArray(question.answer) ? question.answer.join(', ') : question.answer}
+                    />
                   </span>
                 )}
               </div>
               {question.explanation && (
                 <div>
                   <span className="font-semibold text-slate-700">标准解析：</span>
-                  <p className="text-slate-600 mt-1 leading-relaxed">{question.explanation}</p>
+                  <p className="text-slate-600 mt-1 leading-relaxed"><RichText text={question.explanation} /></p>
                 </div>
               )}
             </div>
