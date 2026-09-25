@@ -1,0 +1,5 @@
+{
+  "name": "Exam Prep System",
+  "description": "A comprehensive exam preparation system with subjects, practice questions, past exams, incorrect question tracking, and an online C compiler.",
+  "requestFramePermissions": []
+}

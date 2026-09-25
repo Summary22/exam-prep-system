@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="考试刷题系统">
+  <title>考试刷题系统</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <clipPath id="round">
+      <rect width="512" height="512" rx="113" ry="113"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#round)">
+    <rect width="512" height="512" fill="url(#bg)"/>
+
+    <!--
+      The artwork is authored in the same 0..1024 space used by scripts/make_icons.py.
+      This transform is what that script computes when it crops the mark to its ink
+      bounding box and centres it at 72% of the icon: scale 369/866 = 0.426, then
+      translate so ink (102,205)..(968,988) lands centred.
+    -->
+    <g transform="translate(71.5 89) scale(0.426) translate(-102 -205)">
+      <!-- open book: left and right page -->
+      <polygon fill="#f8fafc" points="102.4,307.2 491.5,204.8 491.5,737.3 102.4,839.7"/>
+      <polygon fill="#f8fafc" points="532.5,204.8 921.6,307.2 921.6,839.7 532.5,737.3"/>
+      <!-- spine gap -->
+      <polygon fill="#2563eb" points="471.0,215.0 553.0,215.0 553.0,752.6 471.0,752.6"/>
+      <!-- text rules -->
+      <g fill="#93c5fd">
+        <rect x="184.3" y="348.2" width="235.5" height="30.7" rx="15.4"/>
+        <rect x="604.2" y="348.2" width="235.5" height="30.7" rx="15.4"/>
+        <rect x="184.3" y="465.9" width="235.5" height="30.7" rx="15.4"/>
+        <rect x="604.2" y="465.9" width="235.5" height="30.7" rx="15.4"/>
+        <rect x="184.3" y="583.7" width="235.5" height="30.7" rx="15.4"/>
+        <rect x="604.2" y="583.7" width="235.5" height="30.7" rx="15.4"/>
+      </g>
+      <!-- check badge -->
+      <circle cx="773.1" cy="793.6" r="194.6" fill="#2563eb"/>
+      <polyline
+        points="683.6,793.6 749.7,859.8 870.4,723.5"
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="43"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg>

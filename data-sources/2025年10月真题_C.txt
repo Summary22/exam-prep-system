@@ -1,0 +1,230 @@
+2025 年 10 月高等教育自学考试 高级语言程序设计试题
+课程代码：13013绝密★考试结束前
+注意事项
+请考生按规定用笔将所有试题的答案涂、写在答题纸上。
+答题前，考生务必将自己的考试课程名称、姓名、准考证号用黑色字迹的签字笔或钢笔填写在答题纸规定的位置上。
+选择题部分
+一、单项选择题：本大题共 15 小题，每小题 2 分，共 30 分。在每小题列出的备选项中只有一项是最符合题目要求的，请将其选出。
+关于 C 程序描述正确的是A. C 程序的基本单位是语句B. C 程序中可以有注释C. C 程序中一条语句只能写在一行上D. C 程序中的所有函数都可以互相调用
+表示空字符的转义字符是A. \0B. \nC. \bD. \t
+C 语言中定义有名常量所用的关键字是A. autoB. constC. defineD. static
+下列运算符中优先级最高的是A. &&B. %C. --D. >=
+设 int x;，则将 x 强制转化成双精度实型的表达式是A. x (double)B. double (x)C. (x) doubleD. (double) x
+下列变量定义会自动赋初值的是A. int m;B. char c;C. register int n;D. static int a;
+声明为 auto 类型变量的作用域是A. 整个文件B. 所定义的函数或复合语句C. 本文件和其他文件D. 从定义位置开始到 main 函数结束
+主函数调用函数 x ()，函数 x () 调用函数 y ()，属于函数的A. 嵌套调用B. 递归调用C. 循环调用D. 分层调用
+关于指针描述不正确的是A. 指针是一种数据类型B. 指针可以实现动态分配内存C. 通过指针可以直接访问变量的值D. 指针是存放数据的内存单元地址
+可以接收 int*fun () 函数返回值的是A. 字符变量B. 指针变量C. 整型变量D. 实型变量
+语句 char *str []={"Zhang","Li","Wang",NULL}; 定义了A. 包含四个元素的字符数组B. 包含四个元素的指针数组C. 指向一个一维字符数组的指针变量D. 指向一个二维字符数组的指针变量
+关于结构体类型定义描述正确的是A. 结构体类型可以嵌套定义B. 结构体类型的成员只能是基本数据类型C. 结构体类型定义后，系统会为其成员分配内存D. 结构体类型中的成员，即使数据类型相同，也必须分别定义
+typedef 的作用是A. 定义常量B. 定义变量C. 定义函数D. 定义已有数据类型的别名
+设 #define P (x) x/x，则执行语句 printf ("% d\n",P (4+6)); 后输出的结果是A. 1B. 10C. 11D. 11.5
+文件型指针的作用是A. 接收文件的存放路径B. 指向文件名字符串的首地址C. 接收文件打开函数返回的地址D. 接收文件打开函数返回的文件名
+非选择题部分
+二、填空题：本大题共 10 空，每空 2 分，共 20 分。
+机器语言是用二进制代码表示的能被计算机识别和执行的______。
+结构化程序设计又称为面向______的程序设计。
+设 int x=3,y=4;，则表达式 ++x<y 的值为______。
+用 {} 括起来的多个语句称为______。
+由基本数据类型按一定规则组合而成的复杂数据类型称为______。
+在 16 位编译器中，一个 int 型变量一般占用______字节内存。
+调用函数之前，应让编译程序预先了解函数的有关信息，即对被调函数进行______。
+使用 C 语言提供的库函数编程时，需要在源程序文件开始部分包含相应的______。
+条件编译可以有效地提高程序的______，使同一个源程序可提供各种不同的版本。
+文件按照内容可分为程序文件和______。
+三、程序分析题：本大题共 4 小题，每小题 4 分，共 16 分。阅读下列程序，写出输出结果。
+
+#include<stdio.h>
+int main(void)
+{
+    int a=-1,b=4,c;
+    c=(++a<0)&&(b--<=0);
+    printf("%d,%d,%d\n",c,a,b);
+    return 0;
+}
+
+#include <stdio.h>
+int main(void)
+{
+    int i,j,w=0;
+    for(i=4;i>1;i--)
+        for(j=1;j<=2;j++)
+            w=w+i*j;
+    printf("%d",w);
+    return 0;
+}
+
+#include <stdio.h>
+int main(void)
+{
+    int a[3][4]={0,1,2,3,4,5,6,7,8,9,10,11},i,j;
+    for(i=0;i<3;i++)
+    {
+        for(j=0;j<4;j++)
+            a[i][j]/=2;
+        printf("%d ",a[i][1]);
+    }
+    return 0;
+}
+
+#include <stdio.h>
+int f(int j)
+{
+    static int k;
+    k++;
+    return k+j;
+}
+int main(void)
+{
+    int j;
+    for(j=1;j<=4;j++)
+        printf("%d ",f(10));
+    return 0;
+}
+四、程序填充题：本大题共 3 小题，每小题 6 分，共 18 分。请将下列程序横线处缺少的部分补上，使其能正确运行。
+从键盘输入一串字符，将其中的大写字母转换成小写字母，小写字母转换成大写字母，数字都改成字符 '0'，输出转换后的结果。
+
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+int main(void)
+{
+    char s1[30],s2[30];
+    gets(______);
+    int i;
+    for(i=0;i<______;i++)
+    {
+        if(islower(s1[i]))
+            s2[i]=toupper(s1[i]);
+        else if(isupper(s1[i]))
+            s2[i]=tolower(s1[i]);
+        else if(______(s1[i]))
+            s2[i]='0';
+    }
+    s2[i]='\0';
+    puts(s2);
+    return 0;
+}
+将字符串 "I like C Programming" 中的 "like" 子串逆序。
+
+#include <stdio.h>
+void fun (char* str,int a,int b)
+{
+    char *p=str+a,*q=______,t;
+    while(p<q)
+    {
+        t=*p;
+        *p=*q;
+        ______;
+        ______;
+    }
+}
+int main(void)
+{
+    char s[]="I like C Programming";
+    fun(______);
+    printf("%s",s);
+    return 0;
+}
+输入并保存若干人员的姓名和联系方式，以姓名为 "#" 结束输入，然后再次输入一个姓名，查找并输出对应人员的联系方式。
+
+#include <string.h>
+#include <stdio.h>
+struct call
+{
+    char name[32];
+    char tel[13];
+};
+int main(void)
+{
+    struct call person[100];
+    char na[32];
+    int i=0,j;
+    scanf("%s%s",person[i].name,person[i].tel);
+    while(strcmp(person[i].name,"#")______0)
+    {
+        ______;
+        scanf("%s%s",person[i].name,person[i].tel);
+    }
+    scanf("%s",na);
+    for(j=0;j<i;j++)
+    {
+        if(strcmp(person[j].name,na)==0)
+        {
+            printf("%s:%s\n",person[j].name,person[j].tel);
+            break;
+        }
+    }
+    if(______)printf("No match!\n");
+    return 0;
+}
+五、程序设计题：本大题共 2 小题，每小题 8 分，共 16 分。
+从键盘输入正整数 k，计算并输出 k 以内 (包括 k) 能被 13 或 17 整除的自然数之和。
+生成一个数列的前 20 项并将其存入一维数组中，该数列第 1、2 项分别为 0 和 1，以后每个奇数项是前两项之和，每个偶数项是前两项之差，输出该数列。
+2025 年 10 月高等教育自学考试全国统一命题考试《13013 高级语言程序设计》答案解析
+一、单项选择题
+B
+A
+B
+C
+D
+D
+B
+A
+C
+B
+B
+A
+D
+C
+C
+二、填空题
+指令系统 (或机器指令)
+过程
+0
+复合语句 (或语句块)
+构造数据类型 (或复合数据类型)
+2
+声明 (或函数原型声明)
+头文件
+可移植性 (或灵活性)
+数据文件
+三、程序分析题
+0,0,4
+27
+0 2 4
+11 12 13 14
+四、程序填充题
+第一空：s1；第二空：strlen (s1)；第三空：isdigit
+第一空：str+b；第二空：*q=t；第三空：p++，q--；第四空：s,2,5
+第一空：!=；第二空：i++；第三空：j==i
+五、程序设计题
+
+#include <stdio.h>
+int main(){
+    int k, sum = 0,i;
+    scanf("%d", &k);
+    for (i=1;i <=k;i++){
+        if (i % 13==0||i%17== 0){
+            sum+=i;
+        }
+    }
+    printf("%d\n", sum);
+    return 0;
+}
+
+#include <stdio.h>
+int main(){
+    int a[20];
+    a[0] = 0;
+    a[1]= 1;
+    for(int i=2;i<20;i++){
+        if (i %2==0)
+            a[i] = a[i-1] + a[i-2];
+        else
+            a[i] = a[i-1] -a[i-2];
+    }
+    for(int i=0;i<20;i++)
+        printf("%d ",a[i]);
+    return 0;
+}
