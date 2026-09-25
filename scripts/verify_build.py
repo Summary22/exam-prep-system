@@ -10,9 +10,11 @@ from __future__ import annotations
 import functools
 import http.server
 import json
+import os
 import pathlib
 import re
 import socketserver
+import sys
 import threading
 
 from playwright.sync_api import sync_playwright
@@ -20,7 +22,12 @@ from playwright.sync_api import sync_playwright
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 PORT = 8099
-BASE = f"http://127.0.0.1:{PORT}/"
+
+# Pass a URL to verify an already-deployed site instead of the local dist/:
+#   python3 scripts/verify_build.py --url https://example.com/app/
+_argv = sys.argv[1:]
+REMOTE = _argv[_argv.index("--url") + 1].rstrip("/") + "/" if "--url" in _argv else None
+BASE = REMOTE or f"http://127.0.0.1:{PORT}/"
 
 # Expected values, measured from the source data rather than assumed.
 EXPECTED_QUESTIONS = 1055
@@ -46,17 +53,30 @@ def serve() -> socketserver.TCPServer:
 
 
 def main() -> int:
-    if not DIST.is_dir():
-        print("dist/ 不存在，先跑 npm run build")
-        return 1
-
-    httpd = serve()
+    httpd = None
+    if REMOTE:
+        print(f"目标：远端站点 {BASE}")
+    else:
+        if not DIST.is_dir():
+            print("dist/ 不存在，先跑 npm run build")
+            return 1
+        httpd = serve()
+        print(f"目标：本地 dist/  {BASE}")
     console_errors: list[str] = []
     console_logs: list[str] = []
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(channel="chrome", headless=True)
+            launch: dict = {"channel": "chrome", "headless": True}
+            # Chrome picks up the system proxy configuration (including PAC) on its own, so
+            # no proxy flag is passed by default. Forcing --proxy-server here actually broke
+            # access on a PAC-configured corporate network: the flat proxy could not reach
+            # the target. Set DSH_PAC_URL only if auto-detection ever needs overriding.
+            pac = os.environ.get("DSH_PAC_URL")
+            if REMOTE and pac:
+                launch["args"] = [f"--proxy-pac-url={pac}"]
+                print("  使用显式 PAC")
+            browser = p.chromium.launch(**launch)
             ctx = browser.new_context(viewport={"width": 1440, "height": 900})
             page = ctx.new_page()
             page.on("console", lambda m: (
@@ -65,8 +85,10 @@ def main() -> int:
             page.on("pageerror", lambda e: console_errors.append(f"pageerror: {e}"))
 
             print("\n═══ 1. 页面加载 ═══")
-            page.goto(BASE, wait_until="load", timeout=45000)
-            page.wait_for_timeout(2500)
+            # Over a corporate proxy some subresource can stall indefinitely, so wait for
+            # the DOM rather than the `load` event when checking a remote deployment.
+            page.goto(BASE, wait_until="domcontentloaded", timeout=60000)
+            page.wait_for_timeout(4000)
             check("标题正确", "考试刷题系统" in page.title(), page.title())
             body = page.inner_text("body")
             check("侧边栏渲染", "考试刷题系统" in body)
@@ -198,7 +220,8 @@ def main() -> int:
 
             browser.close()
     finally:
-        httpd.shutdown()
+        if httpd:
+            httpd.shutdown()
 
     print("\n" + "=" * 60)
     if notes:
